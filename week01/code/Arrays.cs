@@ -12,8 +12,13 @@ public static class Arrays
         // Remember: Using comments in your program, write down your process for solving this problem
         // step by step before you write the code. The plan should be clear enough that it could
         // be implemented by another person.
-
-        return []; // replace this return statement with your own
+        //make an array with length of <length>
+        double [] result = new double[length];
+        //make a loop that multiplies number by 1-length for each loop
+        for (int i = 1; i <= length; i++){
+            result[i-1] = number * i;
+        }
+        return result; // replace this return statement with your own
     }
 
     /// <summary>
@@ -29,5 +34,16 @@ public static class Arrays
         // Remember: Using comments in your program, write down your process for solving this problem
         // step by step before you write the code. The plan should be clear enough that it could
         // be implemented by another person.
+        //make a new result array with same length
+        List<int> result = new List<int>();
+        //make a loop that starts at the length - ammount shift right and counts up from there
+        for (int i = 0; i < data.Count; i++){
+            result.Add(data[(i + data.Count - amount) % data.Count]); //start at the end of <data> count in by <amount> and start at zero when out of bounds <data.Count> to count circularly
+        }
+        data.Clear();
+        foreach (int item in result)
+        {
+            data.Add(item);
+        }
     }
 }
