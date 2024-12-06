@@ -35,7 +35,6 @@ public class PriorityQueueTests
         string[] order = {"jake", "joe", "jared", "jim"};
         foreach (var item in order)
         {
-            
             Assert.AreEqual(item, priorityQueue.Dequeue());
         }
 

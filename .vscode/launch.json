@@ -89,7 +89,7 @@
       "cwd": "${workspaceFolder}/week02/code",
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
-      "stopAtEntry": true
+      "stopAtEntry": false
     },
     {
       "name": "03 Learning Activities",

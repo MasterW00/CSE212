@@ -22,7 +22,24 @@ public static class SetsAndMaps
     public static string[] FindPairs(string[] words)
     {
         // TODO Problem 1 - ADD YOUR CODE HERE
-        return [];
+        var pairs = new string[words.Length];
+        var count = 0;
+        foreach(string word in words){
+            if(!word[0].Equals(word[1])){
+                int ind = (word[0] * word[1]).GetHashCode() % words.Length;
+                if(pairs[ind] == null) pairs[ind] = word;
+                else if(!word[0].Equals(pairs[ind][0])){
+                    words[count] = pairs[ind] + " & " + word;
+                    count++;
+                }
+            } 
+            
+        }
+        var result = new string[count];
+        for(int i = 0; i < count; i++){
+            result[i] = words[i];
+        }
+        return result;
     }
 
     /// <summary>
@@ -43,6 +60,10 @@ public static class SetsAndMaps
         {
             var fields = line.Split(",");
             // TODO Problem 2 - ADD YOUR CODE HERE
+            if(degrees.ContainsKey(fields[3])){
+                degrees[fields[3]] ++;
+            }
+            else degrees.Add(fields[3], 1);
         }
 
         return degrees;
@@ -67,7 +88,32 @@ public static class SetsAndMaps
     public static bool IsAnagram(string word1, string word2)
     {
         // TODO Problem 3 - ADD YOUR CODE HERE
-        return false;
+        word1 = word1.ToLower();
+        word2 = word2.ToLower();
+        var anagram = new Dictionary<char,int>();
+            foreach (var letter in word1)
+            {
+                if(letter != ' '){
+                    if(anagram.ContainsKey(letter)){
+                        anagram[letter] ++;
+                    }
+                    else anagram.Add(letter, 1);
+                }
+            }
+            foreach(var letter in word2){
+                if(letter !=' '){
+                    if(anagram.ContainsKey(letter)){
+                        anagram[letter] --;
+                    }
+                    else return false;
+                }
+            }
+            foreach(var group in anagram){
+                if(group.Value != 0){
+                    return false;
+                }
+            }
+            return true;
     }
 
     /// <summary>
