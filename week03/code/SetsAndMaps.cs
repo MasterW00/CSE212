@@ -22,18 +22,22 @@ public static class SetsAndMaps
     public static string[] FindPairs(string[] words)
     {
         // TODO Problem 1 - ADD YOUR CODE HERE
-        var pairs = new string[words.Length];
+        var pairs = new string[100];
         var count = 0;
         foreach(string word in words){
             if(!word[0].Equals(word[1])){
-                int ind = (word[0] * word[1]).GetHashCode() % words.Length;
-                if(pairs[ind] == null) pairs[ind] = word;
-                else if(!word[0].Equals(pairs[ind][0])){
+                int ind = (word[0] * 0x10 - word[1]  % pairs.Length + pairs.Length) % pairs.Length;
+                if(pairs[ind] == null){
+                    ind = (word[1] * 0x10 - word[0] % pairs.Length + pairs.Length) % pairs.Length;
+                    pairs[ind] = word;
+                }
+                else{
                     words[count] = pairs[ind] + " & " + word;
+                    pairs[ind] = null;
                     count++;
                 }
+                
             } 
-            
         }
         var result = new string[count];
         for(int i = 0; i < count; i++){
@@ -104,16 +108,13 @@ public static class SetsAndMaps
                 if(letter !=' '){
                     if(anagram.ContainsKey(letter)){
                         anagram[letter] --;
+                        if(anagram[letter] == 0) anagram.Remove(letter);
                     }
                     else return false;
                 }
             }
-            foreach(var group in anagram){
-                if(group.Value != 0){
-                    return false;
-                }
-            }
-            return true;
+            if(anagram.Count == 0) return true;
+            return false;
     }
 
     /// <summary>
@@ -146,7 +147,13 @@ public static class SetsAndMaps
         // 1. Add code in FeatureCollection.cs to describe the JSON using classes and properties 
         // on those classes so that the call to Deserialize above works properly.
         // 2. Add code below to create a string out each place a earthquake has happened today and its magitude.
+        string[] quake_today = new string[featureCollection.features.Count];
+        int count = 0;
+        foreach(var feature in featureCollection.features){
+            quake_today[count] = $"{featureCollection.features[count].properties.mag} - Mag , {featureCollection.features[count].properties.place}";
+            count++;
+        }
         // 3. Return an array of these string descriptions.
-        return [];
+        return quake_today;
     }
 }

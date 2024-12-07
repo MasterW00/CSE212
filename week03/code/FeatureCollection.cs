@@ -19,7 +19,7 @@ public class FeatureCollection
         public string place { get; set; }
         public long time { get; set; }
         public long updated { get; set; }
-        public int tz { get; set; }
+        public int? tz { get; set; }
         public string url { get; set; }
         public string detail { get; set; }
         public int? felt { get; set; }
