@@ -1,5 +1,4 @@
 using System.Collections;
-
 public static class Recursion
 {
     /// <summary>
@@ -15,6 +14,7 @@ public static class Recursion
     public static int SumSquaresRecursive(int n)
     {
         // TODO Start Problem 1
+        if(n > 0) return n * n + SumSquaresRecursive(n-1);
         return 0;
     }
 
@@ -39,7 +39,15 @@ public static class Recursion
     /// </summary>
     public static void PermutationsChoose(List<string> results, string letters, int size, string word = "")
     {
-        // TODO Start Problem 2
+        if(word.Count() == size){
+            results.Add(word);
+            return;
+        }
+        for(int i = 0; i < letters.Count(); i++){
+            string next_word = word + letters[i];
+            string remaining_letters = letters.Remove(i, 1);
+            PermutationsChoose(results, remaining_letters, size, next_word);
+        }
     }
 
     /// <summary>
@@ -86,20 +94,28 @@ public static class Recursion
     /// </summary>
     public static decimal CountWaysToClimb(int s, Dictionary<int, decimal>? remember = null)
     {
-        // Base Cases
+        //Base Cases
         if (s == 0)
             return 0;
         if (s == 1)
+        
             return 1;
-        if (s == 2)
+        if (s == 2){
             return 2;
-        if (s == 3)
+        }
+        if (s == 3){
             return 4;
-
+        }
         // TODO Start Problem 3
-
+        if(remember == null){
+            remember = new Dictionary<int, decimal>();
+        }
+        else if (remember.ContainsKey(s)){
+            return remember[s];
+        }
         // Solve using recursion
-        decimal ways = CountWaysToClimb(s - 1) + CountWaysToClimb(s - 2) + CountWaysToClimb(s - 3);
+        decimal ways = CountWaysToClimb(s - 1, remember) + CountWaysToClimb(s - 2, remember) + CountWaysToClimb(s - 3, remember);
+        remember.Add(s, ways);
         return ways;
     }
 
@@ -119,6 +135,26 @@ public static class Recursion
     public static void WildcardBinary(string pattern, List<string> results)
     {
         // TODO Start Problem 4
+        if(!pattern.Contains('*')){
+            results.Add(pattern);
+            return;
+        }
+        WildcardBinary(pattern.Remove(0,1), results);
+        if(pattern[0] == '*'){     
+            List<string> fan = new List<string>(results);
+            for (int i = 0; i < results.Count(); i++){
+                fan[i] = '1' + fan[i];
+            }
+            for (int i = 0; i < results.Count(); i++){
+                results[i] = '0' + results[i];
+            }
+            results.AddRange(fan);
+        }
+        else{
+            for (int i = 0; i < results.Count(); i++){
+                results[i] = pattern[0] + results[i];
+            }
+        }
     }
 
     /// <summary>
@@ -132,9 +168,28 @@ public static class Recursion
         if (currPath == null) {
             currPath = new List<ValueTuple<int, int>>();
         }
-        
-        // currPath.Add((1,2)); // Use this syntax to add to the current path
-
+        currPath.Add((x,y));
+        if(maze.IsEnd(x,y)){
+            
+            results.Add(currPath.AsString());
+            return;
+        }
+        if(maze.IsValidMove(currPath, x+1, y)){
+            var next_path = new List<ValueTuple<int, int>>(currPath);
+            SolveMaze(results, maze, x+1, y, next_path);
+        }
+        if(maze.IsValidMove(currPath, x-1, y)){
+         var next_path = new List<ValueTuple<int, int>>(currPath);
+            SolveMaze(results, maze, x-1, y, next_path);
+        }
+        if(maze.IsValidMove(currPath, x, y+1)){
+  var next_path = new List<ValueTuple<int, int>>(currPath);
+            SolveMaze(results, maze, x, y+1, next_path);
+        }
+        if(maze.IsValidMove(currPath, x, y-1)){
+         var next_path = new List<ValueTuple<int, int>>(currPath);
+            SolveMaze(results, maze, x, y-1, next_path);
+        }
         // TODO Start Problem 5
         // ADD CODE HERE
 
